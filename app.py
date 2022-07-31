@@ -19,4 +19,19 @@ migrate = Migrate(app, db)
 
 @app.route("/")
 def index():
+    selection = Artist.query.all()
     return render_template("pages/home.html")
+
+@app.route("/search", methods=["POST"])
+def search():
+    search_term = request.form.get("search_term")
+    artist_response = Artist.query.filter((Artist.name.ilike("%" + search_term + "%" )))
+    band_response = Band.query.filter((Band.name.ilike("%" + search_term + "%")))
+
+    return render_template("pages/search_artist", results = artist_response, response = band_response)
+
+@app.route("/artists/<int:artist_id>")
+def show_artist(artist_id):
+    data = Artist.query.get(artist_id)
+    snits = Snit.query.join(Aritst, Snit.)
+    
